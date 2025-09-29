@@ -41,12 +41,14 @@ interface Client {
   company?: string
   email: string
   phone?: string
-  status: 'lead' | 'negotiation' | 'client'
-  notes: string
+  status: 'lead' | 'qualified' | 'proposal' | 'negotiation' | 'closed-won' | 'closed-lost'
+  notes?: string
   createdAt: string
-  lastContact?: string
+  lastContact: string
   potential: 'high' | 'medium' | 'low'
-  source: string
+  source?: string
+  value?: number
+  tags?: string[]
 }
 
 export default function CRMPage() {
@@ -73,12 +75,13 @@ export default function CRMPage() {
         company: 'TechStart S.L.',
         email: 'maria@techstart.com',
         phone: '+34 600 123 456',
-        status: 'client',
+        status: 'closed-won',
         notes: 'Cliente satisfecho con nuestros servicios. Interesado en ampliar el proyecto.',
         createdAt: '2024-01-15',
         lastContact: '2024-01-20',
         potential: 'high',
-        source: 'Referido'
+        source: 'Referido',
+        value: 25000
       },
       {
         id: 'client-2',
@@ -91,7 +94,8 @@ export default function CRMPage() {
         createdAt: '2024-01-18',
         lastContact: '2024-01-22',
         potential: 'high',
-        source: 'Web'
+        source: 'Web',
+        value: 18000
       },
       {
         id: 'client-3',
@@ -99,12 +103,13 @@ export default function CRMPage() {
         company: 'Retail Plus',
         email: 'ana@retailplus.es',
         phone: '+34 600 345 678',
-        status: 'lead',
+        status: 'qualified',
         notes: 'Primer contacto realizado. Interesada en consultoría de marketing digital.',
         createdAt: '2024-01-20',
         lastContact: '2024-01-21',
         potential: 'medium',
-        source: 'LinkedIn'
+        source: 'LinkedIn',
+        value: 12000
       },
       {
         id: 'client-4',
@@ -117,7 +122,8 @@ export default function CRMPage() {
         createdAt: '2024-01-10',
         lastContact: '2024-01-15',
         potential: 'low',
-        source: 'Feria'
+        source: 'Feria',
+        value: 5000
       },
       {
         id: 'client-5',
@@ -125,12 +131,13 @@ export default function CRMPage() {
         company: 'Consultoría Empresarial',
         email: 'laura@consultoria-empresarial.es',
         phone: '+34 600 567 890',
-        status: 'client',
+        status: 'closed-won',
         notes: 'Cliente recurrente. Proyecto de formación en curso.',
         createdAt: '2024-01-05',
         lastContact: '2024-01-23',
         potential: 'high',
-        source: 'Referido'
+        source: 'Referido',
+        value: 30000
       }
     ])
   }, [])
@@ -138,8 +145,11 @@ export default function CRMPage() {
   const statuses = [
     'Todos',
     'Lead',
-    'En negociación',
-    'Cliente'
+    'Calificado',
+    'Propuesta',
+    'Negociación',
+    'Ganado',
+    'Perdido'
   ]
 
   const potentials = [
@@ -157,8 +167,11 @@ export default function CRMPage() {
     
     const matchesStatus = selectedStatus === '' || selectedStatus === 'Todos' || 
                          (selectedStatus === 'Lead' && client.status === 'lead') ||
-                         (selectedStatus === 'En negociación' && client.status === 'negotiation') ||
-                         (selectedStatus === 'Cliente' && client.status === 'client')
+                         (selectedStatus === 'Calificado' && client.status === 'qualified') ||
+                         (selectedStatus === 'Propuesta' && client.status === 'proposal') ||
+                         (selectedStatus === 'Negociación' && client.status === 'negotiation') ||
+                         (selectedStatus === 'Ganado' && client.status === 'closed-won') ||
+                         (selectedStatus === 'Perdido' && client.status === 'closed-lost')
     
     const matchesPotential = selectedPotential === '' || selectedPotential === 'Todos' ||
                             (selectedPotential === 'Alto potencial' && client.potential === 'high') ||
@@ -172,8 +185,11 @@ export default function CRMPage() {
   const stats = {
     total: clients.length,
     leads: clients.filter(c => c.status === 'lead').length,
+    qualified: clients.filter(c => c.status === 'qualified').length,
+    proposal: clients.filter(c => c.status === 'proposal').length,
     negotiation: clients.filter(c => c.status === 'negotiation').length,
-    clients: clients.filter(c => c.status === 'client').length,
+    won: clients.filter(c => c.status === 'closed-won').length,
+    lost: clients.filter(c => c.status === 'closed-lost').length,
     highPotential: clients.filter(c => c.potential === 'high').length
   }
 
@@ -182,10 +198,16 @@ export default function CRMPage() {
     switch (status) {
       case 'lead':
         return <Badge className="bg-yellow-100 text-yellow-800">Lead</Badge>
+      case 'qualified':
+        return <Badge className="bg-blue-100 text-blue-800">Calificado</Badge>
+      case 'proposal':
+        return <Badge className="bg-purple-100 text-purple-800">Propuesta</Badge>
       case 'negotiation':
-        return <Badge className="bg-blue-100 text-blue-800">En negociación</Badge>
-      case 'client':
-        return <Badge className="bg-green-100 text-green-800">Cliente</Badge>
+        return <Badge className="bg-orange-100 text-orange-800">Negociación</Badge>
+      case 'closed-won':
+        return <Badge className="bg-green-100 text-green-800">Ganado</Badge>
+      case 'closed-lost':
+        return <Badge className="bg-red-100 text-red-800">Perdido</Badge>
       default:
         return <Badge variant="secondary">{status}</Badge>
     }
@@ -368,9 +390,20 @@ export default function CRMPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Clock className="h-8 w-8 text-blue-600" />
+                <Users className="h-8 w-8 text-blue-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">En negociación</p>
+                  <p className="text-sm font-medium text-gray-600">Calificados</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats.qualified}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center">
+                <Clock className="h-8 w-8 text-orange-600" />
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-600">Negociación</p>
                   <p className="text-2xl font-bold text-gray-900">{stats.negotiation}</p>
                 </div>
               </div>
@@ -381,8 +414,8 @@ export default function CRMPage() {
               <div className="flex items-center">
                 <CheckCircle className="h-8 w-8 text-green-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Clientes</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.clients}</p>
+                  <p className="text-sm font-medium text-gray-600">Ganados</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats.won}</p>
                 </div>
               </div>
             </CardContent>
