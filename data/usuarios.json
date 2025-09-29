@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "email": "admin@test.com",
+    "password": "password123",
+    "nombre": "Administrador",
+    "sector": "Tecnología",
+    "etapa": "Empresa establecida",
+    "necesidades": "Expansión internacional y digitalización",
+    "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100"
+  },
+  {
+    "id": 2,
+    "email": "user@test.com",
+    "password": "password123",
+    "nombre": "Usuario Demo",
+    "sector": "Servicios",
+    "etapa": "Startup temprana",
+    "necesidades": "Financiación y formación en marketing",
+    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100"
+  },
+  {
+    "id": 3,
+    "email": "emprendedor@test.com",
+    "password": "password123",
+    "nombre": "María González",
+    "sector": "Retail",
+    "etapa": "En crecimiento",
+    "necesidades": "Gestión de equipos y optimización de procesos",
+    "avatar": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100"
+  }
+]
