@@ -32,24 +32,8 @@ import { ClientModal } from '@/components/crm/client-modal'
 import { ClientNotesModal } from '@/components/crm/client-notes-modal'
 import { ClientTasksModal } from '@/components/crm/client-tasks-modal'
 import { CommunicationHistoryModal } from '@/components/crm/communication-history-modal'
-import { QuickCommunicationPanel } from '@/components/crm/quick-communication-panel'
 import Link from 'next/link'
-
-interface Client {
-  id: string
-  name: string
-  company?: string
-  email: string
-  phone?: string
-  status: 'lead' | 'qualified' | 'proposal' | 'negotiation' | 'closed-won' | 'closed-lost'
-  notes?: string
-  createdAt: string
-  lastContact: string
-  potential: 'high' | 'medium' | 'low'
-  source?: string
-  value?: number
-  tags?: string[]
-}
+import { Client } from '@/types'
 
 export default function CRMPage() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -585,7 +569,7 @@ export default function CRMPage() {
 
                     <div className="text-sm">
                       <p className="font-medium text-gray-900 mb-1">Notas:</p>
-                      <p className="text-gray-600 line-clamp-2">{client.notes}</p>
+                      <p className="text-gray-600 overflow-hidden text-ellipsis" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{client.notes}</p>
                     </div>
 
                     <div className="p-2 bg-gray-50 rounded text-xs">
