@@ -228,7 +228,7 @@ export default function CRMPage() {
 
   // Función para generar resumen IA
   const generateAISummary = (client: Client) => {
-    if (client.potential === 'high' && client.status === 'client') {
+    if (client.potential === 'high' && client.status === 'closed-won') {
       return 'Cliente con alto potencial y satisfacción'
     }
     if (client.potential === 'high' && client.status === 'negotiation') {
@@ -237,8 +237,17 @@ export default function CRMPage() {
     if (client.potential === 'low' && client.status === 'lead') {
       return 'Lead con bajo interés, considerar reactivación'
     }
-    if (client.status === 'client') {
+    if (client.status === 'closed-won') {
       return 'Cliente activo y satisfecho'
+    }
+    if (client.status === 'qualified') {
+      return 'Lead calificado, listo para propuesta'
+    }
+    if (client.status === 'proposal') {
+      return 'Propuesta enviada, esperando respuesta'
+    }
+    if (client.status === 'closed-lost') {
+      return 'Oportunidad perdida, evaluar estrategia'
     }
     return 'Lead en proceso de calificación'
   }
