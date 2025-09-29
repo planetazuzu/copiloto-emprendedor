@@ -31,20 +31,7 @@ import { ClientTasksModal } from '@/components/crm/client-tasks-modal'
 import { CommunicationHistoryModal } from '@/components/crm/communication-history-modal'
 import Link from 'next/link'
 
-interface Client {
-  id: string
-  name: string
-  company?: string
-  email: string
-  phone?: string
-  status: 'lead' | 'qualified' | 'proposal' | 'negotiation' | 'closed-won' | 'closed-lost'
-  potential: 'high' | 'medium' | 'low'
-  value: number
-  lastContact: string
-  notes?: string
-  source?: string
-  createdAt: string
-}
+import { Client } from '@/types'
 
 interface PipelineStage {
   id: string
@@ -220,7 +207,7 @@ export default function PipelinePage() {
   // Calcular métricas del pipeline
   const totalClients = pipelineStages.reduce((sum, stage) => sum + stage.clients.length, 0)
   const totalValue = pipelineStages.reduce((sum, stage) => 
-    sum + stage.clients.reduce((stageSum, client) => stageSum + client.value, 0), 0
+    sum + stage.clients.reduce((stageSum, client) => stageSum + (client.value || 0), 0), 0
   )
   const wonClients = pipelineStages.find(stage => stage.id === 'closed-won')?.clients.length || 0
   const lostClients = pipelineStages.find(stage => stage.id === 'closed-lost')?.clients.length || 0
@@ -552,7 +539,7 @@ export default function PipelinePage() {
                         </div>
                         
                         <div className="text-sm text-gray-500">
-                          <p>€{client.value.toLocaleString()}</p>
+                          <p>€{(client.value || 0).toLocaleString()}</p>
                           <p>Último contacto: {client.lastContact}</p>
                         </div>
                         

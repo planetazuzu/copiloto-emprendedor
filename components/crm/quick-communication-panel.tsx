@@ -22,20 +22,7 @@ import {
 } from 'lucide-react'
 import { useToast } from '@/lib/hooks/use-toast'
 
-interface Client {
-  id: string
-  name: string
-  company?: string
-  email: string
-  phone?: string
-  status: 'lead' | 'qualified' | 'proposal' | 'negotiation' | 'closed-won' | 'closed-lost'
-  potential: 'high' | 'medium' | 'low'
-  value: number
-  lastContact: string
-  notes?: string
-  source?: string
-  createdAt: string
-}
+import { Client } from '@/types'
 
 interface QuickCommunicationPanelProps {
   client: Client
@@ -96,7 +83,7 @@ export function QuickCommunicationPanel({ client, onCommunicationAdded }: QuickC
   }
 
   const handleCopyContactInfo = () => {
-    const contactInfo = `Nombre: ${client.name}\nEmpresa: ${client.company || 'N/A'}\nEmail: ${client.email}\nTeléfono: ${client.phone || 'N/A'}\nEstado: ${client.status}\nPotencial: ${client.potential}\nValor: €${client.value.toLocaleString()}`
+    const contactInfo = `Nombre: ${client.name}\nEmpresa: ${client.company || 'N/A'}\nEmail: ${client.email}\nTeléfono: ${client.phone || 'N/A'}\nEstado: ${client.status}\nPotencial: ${client.potential}\nValor: €${(client.value || 0).toLocaleString()}`
     navigator.clipboard.writeText(contactInfo)
     toast.success({
       title: 'Información copiada',
@@ -253,7 +240,7 @@ export function QuickCommunicationPanel({ client, onCommunicationAdded }: QuickC
         <div className="pt-3 border-t border-gray-200">
           <div className="flex items-center justify-between text-sm text-gray-600">
             <span>Valor del cliente:</span>
-            <span className="font-semibold text-green-600">€{client.value.toLocaleString()}</span>
+            <span className="font-semibold text-green-600">€{(client.value || 0).toLocaleString()}</span>
           </div>
           <div className="flex items-center justify-between text-sm text-gray-600 mt-1">
             <span>Cliente desde:</span>

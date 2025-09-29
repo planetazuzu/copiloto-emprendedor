@@ -40,21 +40,7 @@ interface Tag {
   updatedAt: string
 }
 
-interface Client {
-  id: string
-  name: string
-  company?: string
-  email: string
-  phone?: string
-  status: 'lead' | 'qualified' | 'proposal' | 'negotiation' | 'closed-won' | 'closed-lost'
-  potential: 'high' | 'medium' | 'low'
-  value: number
-  lastContact: string
-  notes?: string
-  source?: string
-  createdAt: string
-  tags?: string[]
-}
+import { Client } from '@/types'
 
 interface ClientTagsModalProps {
   isOpen: boolean

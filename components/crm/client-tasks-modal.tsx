@@ -52,20 +52,7 @@ interface Task {
   }
 }
 
-interface Client {
-  id: string
-  name: string
-  company?: string
-  email: string
-  phone?: string
-  status: 'lead' | 'qualified' | 'proposal' | 'negotiation' | 'closed-won' | 'closed-lost'
-  potential: 'high' | 'medium' | 'low'
-  value: number
-  lastContact: string
-  notes?: string
-  source?: string
-  createdAt: string
-}
+import { Client } from '@/types'
 
 interface ClientTasksModalProps {
   isOpen: boolean
@@ -194,7 +181,7 @@ export function ClientTasksModal({ isOpen, onClose, client, onUpdateClient }: Cl
   const handleToggleTask = async (taskId: string) => {
     setTasks(prev => prev.map(task => {
       if (task.id === taskId) {
-        const newStatus = task.status === 'completed' ? 'pending' : 'completed'
+        const newStatus: 'completed' | 'pending' = task.status === 'completed' ? 'pending' : 'completed'
         const updatedTask = {
           ...task,
           status: newStatus,

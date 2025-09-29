@@ -18,19 +18,7 @@ import { useFormValidation, commonValidationRules } from '@/lib/hooks/use-form-v
 import { useApiError } from '@/lib/hooks/use-api-error'
 import { FormErrorFallback } from '@/components/error-fallbacks'
 
-interface Client {
-  id: string
-  name: string
-  company?: string
-  email: string
-  phone?: string
-  status: 'lead' | 'qualified' | 'proposal' | 'negotiation' | 'closed-won' | 'closed-lost'
-  notes?: string
-  potential: 'high' | 'medium' | 'low'
-  source?: string
-  value: number
-  createdAt: Date
-}
+import { Client } from '@/types'
 
 interface AddClientPipelineModalProps {
   isOpen: boolean
@@ -48,7 +36,8 @@ export function AddClientPipelineModal({ isOpen, onClose, onAdd }: AddClientPipe
     notes: '',
     potential: 'medium' as 'high' | 'medium' | 'low',
     source: '',
-    value: 0
+    value: 0,
+    lastContact: new Date().toISOString().split('T')[0]
   })
 
   // Validación del formulario
@@ -110,7 +99,8 @@ export function AddClientPipelineModal({ isOpen, onClose, onAdd }: AddClientPipe
       notes: '',
       potential: 'medium',
       source: '',
-      value: 0
+      value: 0,
+      lastContact: new Date().toISOString().split('T')[0]
     })
     clearErrors()
     onClose()

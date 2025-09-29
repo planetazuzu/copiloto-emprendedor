@@ -17,20 +17,7 @@ import {
 import { useFormValidation, commonValidationRules } from '@/lib/hooks/use-form-validation'
 import { useApiError } from '@/lib/hooks/use-api-error'
 import { FormErrorFallback } from '@/components/error-fallbacks'
-
-interface Client {
-  id: string
-  name: string
-  company?: string
-  email: string
-  phone?: string
-  status: 'lead' | 'negotiation' | 'client'
-  notes: string
-  createdAt: string
-  lastContact?: string
-  potential: 'high' | 'medium' | 'low'
-  source: string
-}
+import { Client } from '@/types'
 
 interface ClientModalProps {
   isOpen: boolean
@@ -45,10 +32,12 @@ export function ClientModal({ isOpen, onClose, onSave, client }: ClientModalProp
     company: '',
     email: '',
     phone: '',
-    status: 'lead' as 'lead' | 'negotiation' | 'client',
+    status: 'lead' as 'lead' | 'qualified' | 'proposal' | 'negotiation' | 'closed-won' | 'closed-lost',
     notes: '',
     potential: 'medium' as 'high' | 'medium' | 'low',
-    source: ''
+    source: '',
+    value: 0,
+    lastContact: new Date().toISOString().split('T')[0]
   })
 
   // Validación del formulario
@@ -72,9 +61,11 @@ export function ClientModal({ isOpen, onClose, onSave, client }: ClientModalProp
         email: client.email,
         phone: client.phone || '',
         status: client.status,
-        notes: client.notes,
+        notes: client.notes || '',
         potential: client.potential,
-        source: client.source
+        source: client.source || '',
+        value: client.value || 0,
+        lastContact: client.lastContact
       })
     } else {
       setFormData({
@@ -85,7 +76,9 @@ export function ClientModal({ isOpen, onClose, onSave, client }: ClientModalProp
         status: 'lead',
         notes: '',
         potential: 'medium',
-        source: ''
+        source: '',
+        value: 0,
+        lastContact: new Date().toISOString().split('T')[0]
       })
     }
   }, [client])
@@ -131,7 +124,9 @@ export function ClientModal({ isOpen, onClose, onSave, client }: ClientModalProp
       status: 'lead',
       notes: '',
       potential: 'medium',
-      source: ''
+      source: '',
+      value: 0,
+      lastContact: new Date().toISOString().split('T')[0]
     })
     clearErrors()
     onClose()
@@ -248,8 +243,11 @@ export function ClientModal({ isOpen, onClose, onSave, client }: ClientModalProp
                   required
                 >
                   <option value="lead">Lead</option>
-                  <option value="negotiation">En negociación</option>
-                  <option value="client">Cliente</option>
+                  <option value="qualified">Calificado</option>
+                  <option value="proposal">Propuesta</option>
+                  <option value="negotiation">Negociación</option>
+                  <option value="closed-won">Ganado</option>
+                  <option value="closed-lost">Perdido</option>
                 </select>
               </div>
 
@@ -268,14 +266,27 @@ export function ClientModal({ isOpen, onClose, onSave, client }: ClientModalProp
               </div>
             </div>
 
-            <div>
-              <Label htmlFor="source">Fuente</Label>
-              <Input
-                id="source"
-                value={formData.source}
-                onChange={(e) => setFormData(prev => ({ ...prev, source: e.target.value }))}
-                placeholder="Web, Referido, LinkedIn, Feria..."
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="source">Fuente</Label>
+                <Input
+                  id="source"
+                  value={formData.source}
+                  onChange={(e) => setFormData(prev => ({ ...prev, source: e.target.value }))}
+                  placeholder="Web, Referido, LinkedIn, Feria..."
+                />
+              </div>
+              <div>
+                <Label htmlFor="value">Valor (€)</Label>
+                <Input
+                  id="value"
+                  type="number"
+                  value={formData.value}
+                  onChange={(e) => setFormData(prev => ({ ...prev, value: Number(e.target.value) }))}
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
             </div>
           </div>
 

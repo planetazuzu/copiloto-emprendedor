@@ -37,20 +37,7 @@ interface Note {
   author: string
 }
 
-interface Client {
-  id: string
-  name: string
-  company?: string
-  email: string
-  phone?: string
-  status: 'lead' | 'qualified' | 'proposal' | 'negotiation' | 'closed-won' | 'closed-lost'
-  potential: 'high' | 'medium' | 'low'
-  value: number
-  lastContact: string
-  notes?: string
-  source?: string
-  createdAt: string
-}
+import { Client } from '@/types'
 
 interface ClientNotesModalProps {
   isOpen: boolean
@@ -230,7 +217,7 @@ export function ClientNotesModal({ isOpen, onClose, client, onUpdateClient }: Cl
                 </div>
                 <div className="text-right">
                   <Badge variant="outline" className="mb-1">
-                    €{client.value.toLocaleString()}
+                    €{(client.value || 0).toLocaleString()}
                   </Badge>
                   <p className="text-xs text-gray-500">
                     Último contacto: {client.lastContact}

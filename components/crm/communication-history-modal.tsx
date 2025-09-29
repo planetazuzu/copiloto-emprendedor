@@ -62,20 +62,7 @@ interface Communication {
   tags?: string[]
 }
 
-interface Client {
-  id: string
-  name: string
-  company?: string
-  email: string
-  phone?: string
-  status: 'lead' | 'qualified' | 'proposal' | 'negotiation' | 'closed-won' | 'closed-lost'
-  potential: 'high' | 'medium' | 'low'
-  value: number
-  lastContact: string
-  notes?: string
-  source?: string
-  createdAt: string
-}
+import { Client } from '@/types'
 
 interface CommunicationHistoryModalProps {
   isOpen: boolean
